@@ -13,10 +13,10 @@ fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
 import os
 
 def main():
-    animation = True
-    only_the_trajectory = False
-    animation_trajectory = False
-    plot_trajectory_bool = True
+    animation             = False
+    only_the_trajectory   = False
+    animation_trajectory  = False
+    plot_trajectory_bool  = True
 
     ##Plotted
     trajectory = []

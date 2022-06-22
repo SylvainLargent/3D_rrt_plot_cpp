@@ -134,9 +134,10 @@ class RRT{
 
         //Random Node in boundaries
         Node * generate_random_node(){
-            // if(dist(gen) < goal_sample_rate){
-            //     return this->ps_goal;
-            // }
+            if(dist(gen) < goal_sample_rate){
+                Node * goal = new Node(p_goal);
+                return goal;
+            }
             delta_x = env.get_delta_x();
             delta_y = env.get_delta_y();
             delta_z = env.get_delta_z();

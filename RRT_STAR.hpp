@@ -151,13 +151,17 @@ class RRT_STAR{
                     cost_min_index = k;
                 }
             }
-            node_new->set_parent(this->vertex[cost_min_index]);
+            if(!this->env.is_in_collision( this->vertex[cost_min_index],node_new)){
+                node_new->set_parent(this->vertex[cost_min_index]);
+            }
         }
 
         void rewire(Node * node_new, vector<int> neighbour_indexes){
             for(int k = 0; k < neighbour_indexes.size(); ++k){
                 if(cost(this->vertex[neighbour_indexes[k]]) > get_new_cost(node_new, this->vertex[neighbour_indexes[k]])){
-                    this->vertex[neighbour_indexes[k]]->set_parent(node_new);
+                    if(!this->env.is_in_collision( this->vertex[neighbour_indexes[k]],node_new)){
+                        this->vertex[neighbour_indexes[k]]->set_parent(node_new);
+                    }
                 }
             }
         }
@@ -203,9 +207,10 @@ class RRT_STAR{
 
         //Random Node in boundaries
         Node * generate_random_node(){
-            // if(dist(gen) < goal_sample_rate){
-            //     return this->ps_goal;
-            // }
+            if(dist(gen) < goal_sample_rate){
+                Node * goal = new Node(p_goal);
+                return goal;
+            }
             delta_x = env.get_delta_x();
             delta_y = env.get_delta_y();
             delta_z = env.get_delta_z();
