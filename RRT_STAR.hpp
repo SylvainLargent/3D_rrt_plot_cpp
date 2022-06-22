@@ -110,7 +110,6 @@ class RRT_STAR{
                 if(! (this->env.is_in_collision(node_nearest, node_next)) ){
                     vector<int> neighbour_indexes = find_near_neighbour(node_next);
                     this->vertex.push_back(node_next);
-
                     if(!neighbour_indexes.empty()){
                         choose_parent(node_next, neighbour_indexes);
                         rewire(node_next, neighbour_indexes);

@@ -14,7 +14,7 @@ import os
 
 def main():
     animation             = False
-    only_the_trajectory   = False
+    only_the_trajectory   = True
     animation_trajectory  = False
     plot_trajectory_bool  = True
 
