@@ -1,5 +1,5 @@
-#ifndef RRT_HPP
-#define RRT_HPP
+#ifndef RRT_STAR_HPP
+#define RRT_STAR_HPP
 
 #include <iostream>
 #include <cmath>
@@ -10,6 +10,7 @@
 #include <random>
 #include "Env.hpp"
 #include <limits>
+#include <queue>
 
 using namespace std;
 
@@ -20,16 +21,17 @@ std::uniform_real_distribution<double> dist(0,1);
 
 double infinity = std::numeric_limits<double>::max();
 
-class RRT{
+class RRT_STAR{
     public :
     //Constructeur
-        RRT(Env environment_arg, Point3 p_start_arg, Point3 p_goal_arg, double step_len_arg, double goal_sample_rate_arg, int iter_max_arg ) : 
+        RRT_STAR(Env environment_arg, Point3 p_start_arg, Point3 p_goal_arg, double step_len_arg, double goal_sample_rate_arg, int iter_max_arg, double search_radius_arg ) : 
         env(environment_arg),
         p_start(p_start_arg),
         p_goal(p_goal_arg),
         step_len(step_len_arg),
         goal_sample_rate(goal_sample_rate_arg) ,//Probabilité de concevoir un nouveau noeud ? 
-        iter_max(iter_max_arg)
+        iter_max(iter_max_arg),
+        search_radius(search_radius_arg)
         {
             Node * ps_start = new Node(p_start);
             Node * ps_goal = new Node(p_goal);
@@ -39,7 +41,7 @@ class RRT{
         }
 
     //Destructeur
-        ~RRT(){
+        ~RRT_STAR(){
             // for(int i = 0; i < vertex.size(); i++){
             //     delete(vertex[i]);
             // }
@@ -54,6 +56,7 @@ class RRT{
             double goal_sample_rate; //Probabilité de concevoir un nouveau noeud ? 
             int iter_max;
             Env env;
+            double search_radius;
 
         //Variables indicatrices de certaines informations
             int iter_goal;
@@ -87,50 +90,116 @@ class RRT{
         //The one necessary for the planning, the afterward functions are mainly used in planning
         vector<Node*> planning(){
             this->iter_goal = -1;
-            int i = 0;
+            int k = 0;
             Node * node_rand;
             Node * node_nearest;
             Node * node_next;
             Node * node_goal;
             Node * node_final_goal = new Node(p_goal);
-            while(i < (this->iter_max)){
+            while(k < (this->iter_max)){
                 node_rand = this->generate_random_node();
                 node_nearest = this->vertex[ this->nearest_neighbour(this->vertex,node_rand)];
                 node_next = this->new_state(node_nearest, node_rand);
+                // delete(node_rand);
+
+                int index = search_goal_parent();
+                if(index != (this->vertex.size()-1) && this->iter_goal == -1){
+                    this->iter_goal = k;
+                }
+
                 if(! (this->env.is_in_collision(node_nearest, node_next)) ){
+                    vector<int> neighbour_indexes = find_near_neighbour(node_next);
                     this->vertex.push_back(node_next);
-                    // this->tree.push_back(node_nearest);
-                    // this->tree.push_back(node_next);
-                    delete(node_rand);
-                    double distance = ((node_final_goal->p) - (node_next->p)).norm();
-                    if(distance <= (this->step_len) && (this->iter_goal)==-1){
-                        this->iter_goal = i+1;
-                        node_goal = node_next;
+
+                    if(!neighbour_indexes.empty()){
+                        choose_parent(node_next, neighbour_indexes);
+                        rewire(node_next, neighbour_indexes);
                     }
                 }
-                i++;
+                k++;
             }
 
             for(int i = 1; i < this->vertex.size(); ++i){
-                // if(this->vertex[i]->parent != nullptr){
+                if(this->vertex[i]->parent != nullptr){
                     this->tree.push_back(this->vertex[i]);
                     this->tree.push_back(this->vertex[i]->parent);
-                // }
+                }
             }
 
-            if(iter_goal == -1){
-                    std::cout << "I am empty" << std::endl;
-                    iter_goal = iter_max; 
-                    vector<Node*> empty_vector;
-                    return empty_vector;
-                }
+
+            int index = search_goal_parent();
+            vector<Node * > path;
+            if(index != (this->vertex.size() - 1)){
+                return extract_path(this->vertex[index]);
+            }
             else{
-                vector<Node*> path1 = extract_path(node_goal);
-                return path1;
+                std::cout << "I am empty" << std::endl;
+                iter_goal = iter_max; 
+                vector<Node*> empty_vector;
+                return empty_vector;
             }
             delete(node_final_goal);
         }
 
+
+        void choose_parent(Node * node_new, vector<int> neighbour_indexes){
+            int cost_min_index = 0;
+            double cost_temp = infinity;
+            for(int k = 0; k < neighbour_indexes.size(); ++k){
+                if(cost_temp > get_new_cost(vertex[neighbour_indexes[k]], node_new) ){
+                    cost_temp = get_new_cost(vertex[neighbour_indexes[k]], node_new);
+                    cost_min_index = k;
+                }
+            }
+            node_new->set_parent(this->vertex[cost_min_index]);
+        }
+
+        void rewire(Node * node_new, vector<int> neighbour_indexes){
+            for(int k = 0; k < neighbour_indexes.size(); ++k){
+                if(cost(this->vertex[neighbour_indexes[k]]) > get_new_cost(node_new, this->vertex[neighbour_indexes[k]])){
+                    this->vertex[neighbour_indexes[k]]->set_parent(node_new);
+                }
+            }
+        }
+
+        int search_goal_parent(){
+            vector<double> dist_list;
+            vector<int> node_index;
+            for(int i = 0; i < this->vertex.size(); ++i){
+                double dist = distance(vertex[i]->p, p_goal);
+                if(dist <= this->step_len){
+                    node_index.push_back(i);
+                }
+                dist_list.push_back(dist);
+            }
+            
+            if(node_index.size() >  0){
+                vector<double> cost_list;
+                double cost_min = infinity;
+                int min_index;
+                for(int k = 0; k < node_index.size(); ++k){
+                    double temp_cost = dist_list[node_index[k]] + cost(this->vertex[node_index[k]]);
+                    bool collision = env.is_in_collision(this->vertex[node_index[k]]->p, p_goal);
+                    if(!this->env.is_in_collision(this->vertex[node_index[k]]->p, p_goal)){
+                        cost_list.push_back(temp_cost);
+                        if(cost_min > temp_cost){
+                            cost_min = temp_cost;
+                            min_index = node_index[k];
+                        }
+                    }
+                }
+                
+                if(cost_list.size() > 0){
+                     return min_index;
+                }
+            }
+            return this->vertex.size() -1;
+        }
+
+        double get_new_cost(Node * node_start, Node * node_end){
+            double dist = distance(node_start, node_end);
+            return cost(node_start) + dist;
+        }
 
         //Random Node in boundaries
         Node * generate_random_node(){
@@ -160,6 +229,30 @@ class RRT{
 
             Node* pnode_rand = new Node(Point3(rand_x,rand_y,rand_z)); 
             return pnode_rand;
+        }
+
+        vector<int> find_near_neighbour(Node * node_new){
+            int n = this->vertex.size() + 1;
+            double r;
+            if(this->search_radius*(log(n)/n)> this->step_len){
+                r = step_len;
+            } 
+            else{
+                r = this->search_radius*(log(n)/n);
+            }
+            //La distance de recherche varie (Plus le nombre de sommets visités est faible, plus la distance de recherche sera grande, d'où ln(n)/n)
+            vector<double> dist_list;
+            for(int i = 0; i < this->vertex.size(); ++i){
+                double dist = distance(vertex[i]->p, node_new->p);
+                dist_list.push_back(dist);
+            }
+            vector<int> dist_list_by_index;
+            for(int i = 0; i < this->vertex.size(); ++i){
+                if( dist_list[i] < r && !this->env.is_in_collision(node_new, this->vertex[i])){
+                    dist_list_by_index.push_back(i);
+                }
+            }
+            return dist_list_by_index;
         }
 
         int nearest_neighbour(vector<Node*>node_list, Node * n){
@@ -203,6 +296,16 @@ class RRT{
             return path;
         }
             
+
+        double cost(Node * node_p){
+            double cost = 0;
+            while(node_p->parent != nullptr){
+                cost += distance(node_p->parent->p, node_p->p);
+                node_p = node_p->parent;
+            }
+            return cost;
+        }
+
 };
 
 inline double get_path_length(vector<Node*> path){

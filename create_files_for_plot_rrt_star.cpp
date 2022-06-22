@@ -3,9 +3,10 @@
 #include "Point3.hpp"
 #include "Segment.hpp"
 #include "Env.hpp"
-#include "RRT.hpp"
+//#include "RRT.hpp"
 #include "Node.hpp"
 #include <fstream>
+#include "RRT_STAR.hpp"
 
 
 
@@ -19,10 +20,10 @@ int main(int argc, char ** argv){
         };
 //Obstacles
     // vector<vector<double>> list_rectangles =
-        // {
-            // {-3, 4, 0, 6, 1, 2},
-            // {-3, 1, 1, 6, 1, 3}
-        // };
+    //     {
+    //         // {-3, 4, 0, 6, 1, 2},
+    //         // {-3, 1, 1, 6, 1, 3}
+    //     };
     //Point de départ et destination
     Point3 s_start = Point3(0,0,1.25);
     Point3 s_goal  = Point3(0,5.5,1.25);
@@ -37,7 +38,7 @@ int main(int argc, char ** argv){
         environment.add_rectangle(list_rectangles[i]);
     }
 
-RRT rrt_algo = RRT(environment, s_start, s_goal, step_len, goal_sample_rate,iter_max);
+RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample_rate, iter_max, 10);
 
 
 //Giving out, arena or scene necessary info !
@@ -85,9 +86,7 @@ RRT rrt_algo = RRT(environment, s_start, s_goal, step_len, goal_sample_rate,iter
     }
     path_stream.close();
 
-std::cout << get_path_length(path) << std::endl;
-
-
+    std::cout << get_path_length(path) << std::endl;
 
 //Plotting tree 
     vector<Node*> tree = rrt_algo.tree;  

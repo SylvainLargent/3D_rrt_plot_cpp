@@ -13,24 +13,25 @@ fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
 import os
 
 def main():
-    animation = False
-    only_the_trajectory = True
+    animation = True
+    only_the_trajectory = False
     animation_trajectory = False
-    
+    plot_trajectory_bool = True
+
     ##Plotted
     trajectory = []
     tree = []
     obstacles = []
-
-    with open("trajectory.txt", "r") as file:
-        for line in file:
-            grade_data = line.strip().split(',')
-            vector = []
-            for i in range(len(grade_data)):
-                vector.append(double(grade_data[i]))
-            trajectory.append(vector)
-    Number_of_iteration = trajectory.pop()   #Vecteur contenant un entier
-    print(Number_of_iteration)
+    if(plot_trajectory_bool):
+        with open("trajectory.txt", "r") as file:
+            for line in file:
+                grade_data = line.strip().split(',')
+                vector = []
+                for i in range(len(grade_data)):
+                    vector.append(double(grade_data[i]))
+                trajectory.append(vector)
+        Number_of_iteration = trajectory.pop()   #Vecteur contenant un entier
+        print(Number_of_iteration)
 
     if(only_the_trajectory == False):
         with open("tree.txt", "r") as file:
@@ -99,16 +100,19 @@ def main():
 
 
     #Plot de la trajectoire
-    xs = []
-    ys = []
-    zs = []
-    for i in range(0,len(trajectory)):
-        xs.append(trajectory[i][0])
-        ys.append(trajectory[i][1])
-        zs.append(trajectory[i][2])
-        ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'r')
-        if(animation_trajectory):
-                plt.pause(0.000000000000000001)
+    if(plot_trajectory_bool):
+        xs = []
+        ys = []
+        zs = []
+        for i in range(0,len(trajectory)):
+            xs.append(trajectory[i][0])
+            ys.append(trajectory[i][1])
+            zs.append(trajectory[i][2])
+            ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'r')
+            if(animation_trajectory):
+                    plt.pause(0.000000000000000001)
+
+    plt.savefig('PLOT.png')
     plt.show()  
 
 
