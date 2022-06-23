@@ -18,12 +18,13 @@ def main():
     animation_trajectory  = True
     plot_trajectory_bool  = True
 
+
     ##Plotted
     trajectory = []
     tree = []
     obstacles = []
     if(plot_trajectory_bool):
-        with open("trajectory.txt", "r") as file:
+        with open("csv_files/trajectory.txt", "r") as file:
             for line in file:
                 grade_data = line.strip().split(',')
                 vector = []
@@ -34,7 +35,7 @@ def main():
         print(Number_of_iteration)
 
     if(only_the_trajectory == False):
-        with open("tree.txt", "r") as file:
+        with open("csv_files/tree.txt", "r") as file:
             for line in file:
                 grade_data = line.strip().split(',')
                 vector = []
@@ -42,7 +43,7 @@ def main():
                     vector.append(double(grade_data[i]))
                 tree.append(vector)
 
-    with open("obstacles.txt", "r") as file:
+    with open("csv_files/obstacles.txt", "r") as file:
         for line in file:
             grade_data = line.strip().split(',')
             vector = []
@@ -51,13 +52,13 @@ def main():
             obstacles.append(vector)
 
     boundaries_info = []
-    with open("boundaries.txt", "r") as file:
+    with open("csv_files/boundaries.txt", "r") as file:
         for line in file:
             grade_data = line
             boundaries_info.append(double(grade_data))
 
     start_destination = []
-    with open("start_destination.txt", "r") as file:
+    with open("csv_files/start_destination.txt", "r") as file:
         for line in file:
             grade_data = line.strip().split(',')
             vectorPOS = []

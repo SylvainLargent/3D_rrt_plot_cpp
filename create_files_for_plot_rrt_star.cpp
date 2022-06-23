@@ -58,7 +58,7 @@ RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample
 
 //Giving out, arena or scene necessary info !
     ofstream arena_boundaries;
-    arena_boundaries.open("boundaries.txt");
+    arena_boundaries.open("csv_files/boundaries.txt");
     arena_boundaries << environment.get_x_min() << std::endl;
     arena_boundaries << environment.get_x_max() << std::endl;
     arena_boundaries << environment.get_y_min() << std::endl;
@@ -68,7 +68,7 @@ RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample
     arena_boundaries.close();
 
     ofstream start_destination;
-    start_destination.open("start_destination.txt");
+    start_destination.open("csv_files/start_destination.txt");
     start_destination << (*rrt_algo.ps_start) << std::endl;
     start_destination << (*rrt_algo.ps_goal) << std::endl;   
     start_destination.close();  
@@ -78,7 +78,7 @@ RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample
 //Plotting rectangle obstacles thanks to their vertices
     vector<vector<Node*>> all_boundaries = rrt_algo.env.get_obstacles_vertex();  
     ofstream all_boundaries_stream;
-    all_boundaries_stream.open("obstacles.txt");
+    all_boundaries_stream.open("csv_files/obstacles.txt");
     if(!all_boundaries.empty()){
         for(int i = 0; i < all_boundaries.size(); ++i){
             for(int j = 0; j < all_boundaries[i].size();++j){
@@ -92,7 +92,7 @@ RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample
 //Plotting path trajectory
     vector<Node*> path = rrt_algo.planning();  
     ofstream path_stream;
-    path_stream.open("trajectory.txt");
+    path_stream.open("csv_files/trajectory.txt");
     if(!path.empty()){
         for(int i = 0; i < path.size(); ++i){
             path_stream << (*path[i]) << std::endl;
@@ -106,7 +106,7 @@ RRT_STAR rrt_algo = RRT_STAR(environment, s_start, s_goal, step_len, goal_sample
 //Plotting tree 
     vector<Node*> tree = rrt_algo.tree;  
     ofstream tree_stream;
-    tree_stream.open("tree.txt");
+    tree_stream.open("csv_files/tree.txt");
     if(!tree.empty()){
         for(int i = 0; i < tree.size(); ++i){
             tree_stream << (*tree[i]) << std::endl;
