@@ -15,7 +15,7 @@ import os
 def main():
     animation             = False
     only_the_trajectory   = True
-    animation_trajectory  = False
+    animation_trajectory  = True
     plot_trajectory_bool  = True
 
     ##Plotted
@@ -73,21 +73,6 @@ def main():
     ax.scatter(start_destination[0],start_destination[1],start_destination[2], color = 'r',s = 200)
     ax.scatter(start_destination[3],start_destination[4],start_destination[5], color = 'r', s = 200)
 
-    #Plot des obstacles
-    Z=[]
-    for i in range(len(obstacles)):
-        Z.append([obstacles[i][0], obstacles[i][1], obstacles[i][2]])
-        if(len(Z)==8):
-            verts = [[Z[0],Z[1],Z[2],Z[3]],
-                    [Z[4],Z[5],Z[6],Z[7]],
-                    [Z[0],Z[1],Z[5],Z[4]],
-                    [Z[2],Z[3],Z[7],Z[6]],
-                    [Z[1],Z[2],Z[6],Z[5]],
-                    [Z[4],Z[7],Z[3],Z[0]]]
-            ax.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='g', alpha=.20))
-            Z = []
-
-
     #Plot de l'arbre
     if(only_the_trajectory == False):
         for i in range(1,len(tree),2):
@@ -111,6 +96,20 @@ def main():
             ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'r')
             if(animation_trajectory):
                     plt.pause(0.000000000000000001)
+
+    #Plot des obstacles
+    Z=[]
+    for i in range(len(obstacles)):
+        Z.append([obstacles[i][0], obstacles[i][1], obstacles[i][2]]) #On lui donne les coordonnees de chaque sommet
+        if(len(Z)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
+            verts = [[Z[0],Z[1],Z[2],Z[3]],
+                    [Z[4],Z[5],Z[6],Z[7]],
+                    [Z[0],Z[1],Z[5],Z[4]],
+                    [Z[2],Z[3],Z[7],Z[6]],
+                    [Z[1],Z[2],Z[6],Z[5]],
+                    [Z[4],Z[7],Z[3],Z[0]]]
+            ax.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='g', alpha=.20))
+            Z = []
 
     plt.savefig('PLOT.png')
     plt.show()  

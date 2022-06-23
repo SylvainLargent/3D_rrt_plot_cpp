@@ -10,7 +10,9 @@
 
 
 int main(int argc, char ** argv){
-    Env environment = Env(-3, 3, -1, 8, 0, 3, 0.25, 0.25, 0.099);
+    // Env environment = Env(-3, 3, -1, 8, 0, 3, 0.25, 0.25, 0.099);
+    Env environment = Env(-1, 8, -1, 8, 0, 3, 0.25, 0.25, 0.099);
+
 //Rectangles obstacles (Coordonnées du coin le plus proche de l'origine, épaisseur suivant les 3 directions x,y,z)
     // vector<vector<double>> list_rectangles =
     //     {
@@ -27,15 +29,18 @@ int main(int argc, char ** argv){
 //Amusons nous à faire un labyrinthe
     vector<vector<double>> list_rectangles =
         {
-            {-3, 0, 0, 4, 1, 3},
-           {-2, 3, 0, 5, 1, 3},
-           {-3, 5, 0, 2.5, 1, 3},
-            {0.5, 5, 0, 2.5, 1, 3}
+        //     {-3, 0, 0, 4, 1, 3},
+        //    {-2, 3, 0, 5, 1, 3},
+        //    {-3, 5, 0, 2.5, 1, 3},
+        //     {0.5, 5, 0, 2.5, 1, 3}
         };
 
     //Point de départ et destination
-    Point3 s_start = Point3(-2.75,-0.5,1.25);
-    Point3 s_goal  = Point3(2.75,7.5,1.25);
+    // Point3 s_start = Point3(-2.75,-0.5,1.25);
+    // Point3 s_goal  = Point3(2.75,7.5,1.25);
+
+    Point3 s_start = Point3(0,0,1.25);
+    Point3 s_goal  = Point3(4,0,1.25);
 
     // Point3 s_start = Point3(0,0,1.25);
     // Point3 s_goal  = Point3(0,5.5,1.25);
