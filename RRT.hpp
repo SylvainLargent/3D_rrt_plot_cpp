@@ -112,14 +112,14 @@ class RRT{
             }
 
             for(int i = 1; i < this->vertex.size(); ++i){
-                // if(this->vertex[i]->parent != nullptr){
+                if(this->vertex[i]->parent != nullptr && this->vertex[i] != nullptr){
                     this->tree.push_back(this->vertex[i]);
                     this->tree.push_back(this->vertex[i]->parent);
-                // }
+                }
             }
 
             if(iter_goal == -1){
-                    std::cout << "I am empty" << std::endl;
+                    std::cout << "No Path Found" << std::endl;
                     iter_goal = iter_max; 
                     vector<Node*> empty_vector;
                     return empty_vector;

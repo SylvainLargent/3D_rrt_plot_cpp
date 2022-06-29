@@ -132,7 +132,7 @@ class RRT_STAR{
                 return extract_path(this->vertex[index]);
             }
             else{
-                std::cout << "I am empty" << std::endl;
+                std::cout << "No Path found" << std::endl;
                 iter_goal = iter_max; 
                 vector<Node*> empty_vector;
                 return empty_vector;
