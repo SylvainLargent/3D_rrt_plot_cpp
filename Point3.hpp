@@ -50,8 +50,6 @@ inline Point3 operator+(Point3 u, Point3 v){
             return Point3(u.e[0]+v.e[0], u.e[1]+v.e[1], u.e[2]+v.e[2]);
 }
 
-
-
 inline Point3 operator-(Point3& u, Point3& v){
     return Point3(u.e[0]-v.e[0], u.e[1]-v.e[1], u.e[2]-v.e[2]);
 }

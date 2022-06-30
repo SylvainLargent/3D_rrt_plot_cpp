@@ -10,10 +10,14 @@
 
 
 int main(int argc, char ** argv){
-    // Env environment = Env(-3, 3, -1, 8, 0, 3, 0.25, 0.25, 0.099);
-    Env environment = Env(-1, 8, -1, 8, 0, 3, 0.25, 0.25, 0.099);
+    // Env environment = Env(-2, 2, -2.5, 2.5, 0, 3, 0.25, 0.25, 0.099);
+    // (x_min, x_max, y_min, y_max, z_min, z_max, delta_x, delta_y, delta_z)
+    // deltas represents the margin we allowed between the trajectory and the obstacles
 
-//Rectangles obstacles (Coordonnées du coin le plus proche de l'origine, épaisseur suivant les 3 directions x,y,z)
+    //Voliere de l'U2IS
+    Env environment = Env(-1.5, 1.4, -1.4, 1.8, -0.1, 2, 0.25, 0.25, 0.099);
+
+//Rectangular obstacles (Coordinates of the lower corner close to the origin, then thickness in each direction)...
     // vector<vector<double>> list_rectangles =
     //     {
     //         {-3, 3, 0, 2.70, 2, 3},
@@ -23,32 +27,26 @@ int main(int argc, char ** argv){
     // vector<vector<double>> list_rectangles =
     //     {
     //         {-3, 4, 0, 6, 1, 2},
-    //         {-3, 1, 1, 6, 1, 3}
+    //        {-3, 1, 1, 6, 1, 3}
     //     };
 
 //Amusons nous à faire un labyrinthe
     vector<vector<double>> list_rectangles =
-        {
-        //     {-3, 0, 0, 4, 1, 3},
+    {
+        //    {-3, 0, 0, 4, 1, 3},
         //    {-2, 3, 0, 5, 1, 3},
         //    {-3, 5, 0, 2.5, 1, 3},
-        //     {0.5, 5, 0, 2.5, 1, 3}
-        };
+        //    {0.5, 5, 0, 2.5, 1, 3}
+    };
 
-    //Point de départ et destination
-    // Point3 s_start = Point3(-2.75,-0.5,1.25);
-    // Point3 s_goal  = Point3(2.75,7.5,1.25);
-
-    Point3 s_start = Point3(0,0,1.25);
-    Point3 s_goal  = Point3(4,0,1.25);
-
-    // Point3 s_start = Point3(0,0,1.25);
-    // Point3 s_goal  = Point3(0,5.5,1.25);
+    //Starting point and goal destination
+    Point3 s_goal  =  Point3(-0.917, -0.92, 1);
+    Point3 s_start  =  Point3(-0.8, 0.80, 1);
 
     //Number of iterations and step length at each step
     int iter_max = atoi(argv[1]);
     double step_len = atof(argv[2]);
-    double goal_sample_rate = 0.1; //Pour l'instant inutil car mal compris
+    double goal_sample_rate = 0.1;
     
 //Adding rectangles to the scene
     for(int i = 0; i < list_rectangles.size(); ++i){

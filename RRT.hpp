@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cmath>
 #include "Point3.hpp"
-#include "Segment.hpp"
 #include <vector>
 #include "Node.hpp"
 #include <random>
@@ -22,7 +21,7 @@ double infinity = std::numeric_limits<double>::max();
 
 class RRT{
     public :
-    //Constructeur
+    //Constructor
         RRT(Env environment_arg, Point3 p_start_arg, Point3 p_goal_arg, double step_len_arg, double goal_sample_rate_arg, int iter_max_arg ) : 
         env(environment_arg),
         p_start(p_start_arg),
@@ -35,29 +34,24 @@ class RRT{
             Node * ps_goal = new Node(p_goal);
             this->ps_goal = ps_goal;
             this->ps_start = ps_start;
-            vertex.push_back(ps_start); //
+            vertices.push_back(ps_start); //
         }
 
-    //Destructeur
-        ~RRT(){
-            // for(int i = 0; i < vertex.size(); i++){
-            //     delete(vertex[i]);
-            // }
-            // delete(this->ps_goal);
-        }
+    //Destructor
+        ~RRT(){}
 
-//Variables utiles
-        //Arguments nécessaires pour le constructeur
+//Useful variables
+        //Necessary argument for the constructor
             Point3 p_start;
             Point3 p_goal;
             double step_len;
-            double goal_sample_rate; //Probabilité de concevoir un nouveau noeud ? 
+            double goal_sample_rate; //Probability of sampling the goal node instead of a new random node
             int iter_max;
             Env env;
 
-        //Variables indicatrices de certaines informations
+        //Useful information about the scene
             int iter_goal;
-            vector<Node*> vertex;
+            vector<Node*> vertices;
             vector<Node*> tree;
             //Limits of the arena
             double x_min = env.get_x_min();
@@ -71,11 +65,11 @@ class RRT{
             //Pointers towards Node start and destination
             Node* ps_start;
             Node* ps_goal;
-            //We have taken the same marge for all directions
+            //margins in all directions
             double delta_x = env.get_delta_x();
             double delta_y = env.get_delta_y();
             double delta_z = env.get_delta_z();
-        //generators
+        //New boundaries limits
             double x_rand_min = x_min + delta_x;
             double x_rand_max = x_max - delta_x;
             double y_rand_min = y_min + delta_y;
@@ -83,7 +77,7 @@ class RRT{
             double z_rand_min = z_min + delta_z;
             double z_rand_max = z_max - delta_z;
 
-//Fonctions utiles
+//Useful function
         //The one necessary for the planning, the afterward functions are mainly used in planning
         vector<Node*> planning(){
             this->iter_goal = -1;
@@ -95,10 +89,10 @@ class RRT{
             Node * node_final_goal = new Node(p_goal);
             while(i < (this->iter_max)){
                 node_rand = this->generate_random_node();
-                node_nearest = this->vertex[ this->nearest_neighbour(this->vertex,node_rand)];
+                node_nearest = this->vertices[ this->nearest_neighbour(this->vertices,node_rand)];
                 node_next = this->new_state(node_nearest, node_rand);
                 if(! (this->env.is_in_collision(node_nearest, node_next)) ){
-                    this->vertex.push_back(node_next);
+                    this->vertices.push_back(node_next);
                     // this->tree.push_back(node_nearest);
                     // this->tree.push_back(node_next);
                     delete(node_rand);
@@ -111,10 +105,10 @@ class RRT{
                 i++;
             }
 
-            for(int i = 1; i < this->vertex.size(); ++i){
-                if(this->vertex[i]->parent != nullptr && this->vertex[i] != nullptr){
-                    this->tree.push_back(this->vertex[i]);
-                    this->tree.push_back(this->vertex[i]->parent);
+            for(int i = 1; i < this->vertices.size(); ++i){
+                if(this->vertices[i]->parent != nullptr && this->vertices[i] != nullptr){
+                    this->tree.push_back(this->vertices[i]);
+                    this->tree.push_back(this->vertices[i]->parent);
                 }
             }
 
@@ -200,7 +194,7 @@ class RRT{
                 node_now = node_now->get_parent();
                 ++i;
             }
-            delete(node_final); //deleted ici, car pas de manipulation d'adresse, seulement le contenu de la position goal est intéressante
+            delete(node_final); 
             return path;
         }
             
