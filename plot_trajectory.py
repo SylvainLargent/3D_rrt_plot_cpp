@@ -92,13 +92,14 @@ def main():
     for i in range(len(obstacles)):
         Z.append([obstacles[i][0], obstacles[i][1], obstacles[i][2]]) #On lui donne les coordonnees de chaque sommet
         if(len(Z)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
-            verts = [[Z[0],Z[1],Z[2],Z[3]],
+            faces = [[Z[0],Z[1],Z[2],Z[3]], 
                     [Z[4],Z[5],Z[6],Z[7]],
                     [Z[0],Z[1],Z[5],Z[4]],
                     [Z[2],Z[3],Z[7],Z[6]],
                     [Z[1],Z[2],Z[6],Z[5]],
                     [Z[4],Z[7],Z[3],Z[0]]]
-            ax.add_collection3d(Poly3DCollection(verts, facecolors='cyan', linewidths=1, edgecolors='g', alpha=.20))
+            collection = ax.add_collection3d(Poly3DCollection(faces, linewidths=1, edgecolors='g', alpha=.20))
+            collection.set_facecolor('cyan')
             Z = []
 
     #Plotting the tree
