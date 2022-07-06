@@ -1,5 +1,6 @@
 from ast import Num
 from ctypes import pointer
+from turtle import color
 #from turtle import color
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -39,10 +40,10 @@ def main():
     if(plot_trajectory_bool):
         with open("csv_files/trajectory.txt", "r") as file:
             for line in file:
-                grade_data = line.strip().split(',')
+                trajectoryString = line.strip().split(',')
                 vector = []
-                for i in range(len(grade_data)):
-                    vector.append(double(grade_data[i]))
+                for i in range(len(trajectoryString)):
+                    vector.append(double(trajectoryString[i]))
                 trajectory.append(vector)
         Number_of_iteration = trajectory.pop()   #Vector containing an integer, number of iteration till goal
         print(Number_of_iteration)
@@ -50,33 +51,33 @@ def main():
     if(plot_tree == True):
         with open("csv_files/tree.txt", "r") as file:
             for line in file:
-                grade_data = line.strip().split(',')
+                treeString = line.strip().split(',')
                 vector = []
-                for i in range(len(grade_data)):
-                    vector.append(double(grade_data[i]))
+                for i in range(len(treeString)):
+                    vector.append(double(treeString[i]))
                 tree.append(vector)
 
     with open("csv_files/obstacles.txt", "r") as file:
         for line in file:
-            grade_data = line.strip().split(',')
+            obstacleString = line.strip().split(',')
             vector = []
-            for i in range(len(grade_data)):
-                vector.append(double(grade_data[i]))
+            for i in range(len(obstacleString)):
+                vector.append(double(obstacleString[i]))
             obstacles.append(vector)
 
     boundaries_info = []
     with open("csv_files/boundaries.txt", "r") as file:
         for line in file:
-            grade_data = line
-            boundaries_info.append(double(grade_data))
+            boundariesString = line
+            boundaries_info.append(double(boundariesString))
 
     start_destination = []
     with open("csv_files/start_destination.txt", "r") as file:
         for line in file:
-            grade_data = line.strip().split(',')
+            start_or_destination_String = line.strip().split(',')
             vectorPOS = []
-            for i in range(len(grade_data)):
-                start_destination.append(double(grade_data[i]))
+            for i in range(len(start_or_destination_String)):
+                start_destination.append(double(start_or_destination_String[i]))
 
     #Boundaries info
     #Plot starting and goal points
@@ -98,8 +99,8 @@ def main():
                     [Z[2],Z[3],Z[7],Z[6]],
                     [Z[1],Z[2],Z[6],Z[5]],
                     [Z[4],Z[7],Z[3],Z[0]]]
-            collection = ax.add_collection3d(Poly3DCollection(faces, linewidths=1, edgecolors='g', alpha=.20))
-            collection.set_facecolor('cyan')
+            collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'cyan' ,linewidths=1, edgecolors='g', alpha=.20))
+            # collection.set_facecolor('cyan')
             Z = []
 
     #Plotting the tree
