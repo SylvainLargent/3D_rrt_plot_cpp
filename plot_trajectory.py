@@ -16,9 +16,11 @@ fig, ax = plt.subplots(subplot_kw={'projection': '3d'})
 import os
 
 def main():
-    trajectory_b  = True
-    plot_position_animation = True
-    
+    trajectory_b  = False
+    plot_position_animation = False
+    plot_actual_position = False
+    plot_start_end = False
+
     if(trajectory_b):
         animation             = False
         plot_tree             = False
@@ -26,7 +28,7 @@ def main():
         plot_trajectory_bool  = True    
     else :
         animation             = False
-        plot_tree             = True   
+        plot_tree             = False  
         animation_trajectory  = False
         plot_trajectory_bool  = False
 
@@ -85,8 +87,9 @@ def main():
     ax.set_ylim3d(boundaries_info[2], boundaries_info[3])
     ax.set_zlim3d(boundaries_info[4], boundaries_info[5])
 
-    ax.scatter(start_destination[0],start_destination[1],start_destination[2], color = 'r',s = 200)
-    ax.scatter(start_destination[3],start_destination[4],start_destination[5], color = 'r', s = 200)
+    if(plot_start_end):
+        ax.scatter(start_destination[0],start_destination[1],start_destination[2], color = 'r',s = 200)
+        ax.scatter(start_destination[3],start_destination[4],start_destination[5], color = 'r', s = 200)
 
     #Ploting obstacles
     Z=[]
@@ -128,35 +131,127 @@ def main():
 
     
    
+    if(plot_actual_position):
+        if(plot_position_animation):
+            def animate(i):
+                line = pd.read_csv('csv_files/position.txt', sep=";|,", engine="python", skipfooter=1, header = None, usecols=[0,1,2], names=['x', 'y','z'])
+                x = line["x"]
+                y = line["y"]
+                z = line["z"]
+                ax.plot3D(x, y, z, 'green')
+            ani = FuncAnimation(plt.gcf(), animate, interval=500)
 
-    if(plot_position_animation):
-        def animate(i):
-            line = pd.read_csv('csv_files/position.txt', sep=";|,", engine="python", skipfooter=1, header = None, usecols=[0,1,2], names=['x', 'y','z'])
-            x = line["x"]
-            y = line["y"]
-            z = line["z"]
-            ax.plot3D(x, y, z, 'green')
-        ani = FuncAnimation(plt.gcf(), animate, interval=500)
+        if(not plot_position_animation):
+            with open("csv_files/position.txt", "r") as file:
+                for line in file:
+                    grade_data = line.strip().split(',')
+                    vector = []
+                    for i in range(len(grade_data)):
+                        vector.append(double(grade_data[i]))
+                    position.append(vector)
 
-    if(not plot_position_animation):
-        with open("csv_files/position.txt", "r") as file:
-            for line in file:
-                grade_data = line.strip().split(',')
-                vector = []
-                for i in range(len(grade_data)):
-                    vector.append(double(grade_data[i]))
-                position.append(vector)
-
-        ##Plotting the position
-            xs = []
-            ys = []
-            zs = []
-            for i in range(0,len(position)):
-                xs.append(position[i][0])
-                ys.append(position[i][1])
-                zs.append(position[i][2])
-                ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'g')
+            ##Plotting the position
+                xs = []
+                ys = []
+                zs = []
+                for i in range(0,len(position)):
+                    xs.append(position[i][0])
+                    ys.append(position[i][1])
+                    zs.append(position[i][2])
+                    ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'g')
     
+    plot_dynibex = True
+    rate = 30
+    if(plot_dynibex):
+        ##Plotted
+        vertices_of_the_3Dboxes = []
+
+        with open("export_3d.txt", "r") as file:
+            for line in file:
+                #Traitons une ligne de trois intervalles dans chaque direction
+                line = line.replace( '(' , '' )
+                line = line.replace( ')' , '' )
+                list_of_intervals = line.strip().split(';') 
+                lower_bounds = [] #list of lower boundaries in each direction
+                widths       = []  
+                for i in range(len(list_of_intervals)): #On traite chaque direction une à une
+                    B = list_of_intervals[i].replace('[','')
+                    B = B.replace(']','')
+                    B = B.split(',')
+                    w = double(B[1]) - double(B[0])
+                    lb = double(B[0]) #lower bound
+                    lower_bounds.append(lb)
+                    widths.append(w)
+                vertices_of_the_3Dboxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+                vertices_of_the_3Dboxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+
+        #Ploting vertices_of_the_3Dboxes
+        Z=[]
+        for i in range(len(vertices_of_the_3Dboxes)):
+            if(i%rate==0):
+                Z.append(vertices_of_the_3Dboxes[i]) #On lui donne les coordonnees de chaque sommet
+                if(len(Z)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
+                    faces = [[Z[0],Z[1],Z[2],Z[3]], 
+                            [Z[4],Z[5],Z[6],Z[7]],
+                            [Z[0],Z[1],Z[5],Z[4]],
+                            [Z[2],Z[3],Z[7],Z[6]],
+                            [Z[1],Z[2],Z[6],Z[5]],
+                            [Z[4],Z[7],Z[3],Z[0]]]
+                    collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'yellow' ,linewidths=0.05, edgecolors='blue', alpha=.2))
+                    # collection.set_facecolor('cyan')
+                    Z = []
+        
+        trajectory_boxes = []
+
+        with open("trajectory_boxes.txt", "r") as file:
+            for line in file:
+                #Traitons une ligne de trois intervalles dans chaque direction
+                line = line.replace( '(' , '' )
+                line = line.replace( ')' , '' )
+                list_of_intervals = line.strip().split(';') 
+                lower_bounds = [] #list of lower boundaries in each direction
+                widths       = []  
+                for i in range(len(list_of_intervals)): #On traite chaque direction une à une
+                    B = list_of_intervals[i].replace('[','')
+                    B = B.replace(']','')
+                    B = B.split(',')
+                    w = double(B[1]) - double(B[0])
+                    lb = double(B[0]) #lower bound
+                    lower_bounds.append(lb)
+                    widths.append(w)
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+
+        #Ploting trajectory_boxes
+        V=[]
+        for i in range(len(trajectory_boxes)):
+            if(i%rate==0):
+                V.append(trajectory_boxes[i]) #On lui donne les coordonnees de chaque sommet
+                if(len(V)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
+                    faces = [[V[0],V[1],V[2],V[3]], 
+                            [V[4],V[5],V[6],V[7]],
+                            [V[0],V[1],V[5],V[4]],
+                            [V[2],V[3],V[7],V[6]],
+                            [V[1],V[2],V[6],V[5]],
+                            [V[4],V[7],V[3],V[0]]]
+                    collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'red' ,linewidths=0.1, edgecolors='orange', alpha=.2))
+                    # collection.set_facecolor('cyan')
+                    V = []
+        
+
+
     plt.savefig('PLOT.png')
     plt.show()  
 

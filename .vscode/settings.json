@@ -55,6 +55,9 @@
         "optional": "cpp",
         "set": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "*.h_": "cpp",
+        "list": "cpp",
+        "typeindex": "cpp"
     }
 }

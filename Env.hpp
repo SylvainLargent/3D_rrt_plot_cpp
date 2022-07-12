@@ -291,8 +291,50 @@ class Env{
                 boundaries_list.push_back(new Node(Point3(ox+ex,oy+ey,oz+ez)));
                 boundaries_list.push_back(new Node(Point3(ox,oy+ey,oz+ez)));
 
+                //Numérotation des différents coins
+                //          7***********************6
+                //         **                      **
+                //        * *                     * *
+                //       *  *                    *  *
+                //      4**********************5    *   epaisseur z
+                //      *   *                  *    *                         
+                //      *   *                  *    *                         
+                //      *   *                  *    *                         
+                //      *   3***********************2                         
+                //      *  *                   *   *
+                //      * *                    *  * epaisseur y
+                //      *                      * *                            
+                //      0**********************1         
+                //             epaisseur x                  
+
                 all_boundaries_list.push_back(boundaries_list);
 
+                ++i;
+            }
+            return all_boundaries_list;
+        }
+
+        vector<vector<Node*>> get_inflated_obs_vertex(){  //Inflated obs_vertex
+            vector<vector<Node*>> all_boundaries_list;
+            int i = 0;
+            double ox, oy, oz, ex, ey, ez;
+            while( i < number_of_rectangles){
+                vector<Node*> boundaries_list;
+                ox = rectangles[i][0];
+                oy = rectangles[i][1];
+                oz = rectangles[i][2];
+                ex = rectangles[i][3];
+                ey = rectangles[i][4];
+                ez = rectangles[i][5];
+                boundaries_list.push_back(new Node(Point3(ox - delta_x, oy - delta_y, oz - delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox - delta_x, oy - delta_y, oz + ez + delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox + ex + delta_x, oy - delta_y, oz + ez + delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox + ex + delta_x, oy - delta_y, oz - delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox - delta_x, oy + ey + delta_y, oz - delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox - delta_x, oy + ey + delta_y, oz + ez + delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox + ex + delta_x, oy + ey + delta_y, oz + ez + delta_z)));
+                boundaries_list.push_back(new Node(Point3(ox + ex + delta_x, oy + ey + delta_y, oz - delta_z)));                   
+                all_boundaries_list.push_back(boundaries_list);  // vertex 1,2 ... till 8
                 ++i;
             }
             return all_boundaries_list;

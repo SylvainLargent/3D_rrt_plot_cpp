@@ -11,32 +11,15 @@
 
 
 int main(int argc, char ** argv){
-    //Voliere de l'U2IS
+//Voliere de l'U2IS
     Env environment = Env(-1.5, 1.4, -1.4, 1.8, -0.1, 2, 0.25, 0.25, 0.099);
-    //Env environment = Env(-3, 3, -1, 8, 0, 3, 0.25, 0.25, 0.099); 
-    // (x_min, x_max, y_min, y_max, z_min, z_max, delta_x, delta_y, delta_z)
-    // deltas represents the margin we allowed between the trajectory and the obstacles
 
-//Rectangular obstacles (Coordinates of the lower corner close to the origin, then thickness in each direction)...
-    // vector<vector<double>> list_rectangles =
-    //     {
-    //         {-3, 3, 0, 2.70, 2, 3},
-    //         {0.7, 3, 0, 2.3, 2, 3}
-    //     };
-//Obstacles
-    // vector<vector<double>> list_rectangles =
-    //     {
-    //         {-3, 4, 0, 6, 1, 2},
-    //        {-3, 1, 1, 6, 1, 3}
-    //     };
-
-//Amusons nous à faire un labyrinthe
+    //Amusons nous à faire un labyrinthe
     vector<vector<double>> list_rectangles =
     {
-        // {-3, 0, 0, 4, 1, 3},
-        // {-2, 3, 0, 5, 1, 3},
-        // {-3, 5, 0, 2.5, 1, 3},
-        // {0.5, 5, 0, 2.5, 1, 3}
+        {-1.0, -1.25, -0.1, 0.25, 0.7, 0.6}, // Boite proche du mur
+        {-1.1, 0.71, -0.1, 0.4, 0.6, 0.5},  //Boite opérateur
+        {-1.65, -0.2, -0.1, 1.2, 0.3, 3}      //Obstacle virtuel
     };
 
 
@@ -44,6 +27,7 @@ int main(int argc, char ** argv){
     //Starting point and goal destination
     Point3 s_goal  =  Point3(-0.917, -0.92, 1);
     Point3 s_start  =  Point3(-0.8, 0.80, 1);
+
 
     //Number of iterations and step length at each step
     int iter_max = atoi(argv[1]);

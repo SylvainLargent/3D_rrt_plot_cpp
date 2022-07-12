@@ -1,0 +1,437 @@
+make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 4.1
+# Built for x86_64-pc-linux-gnu
+# Copyright (C) 1988-2014 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+ 
+
+# Make data base, printed on Tue Jul 12 14:51:57 2022
+
+# Variables
+
+# 'override' directive
+GNUMAKEFLAGS := 
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# environment
+DESKTOP_SESSION = ubuntu
+# default
+.SHELLFLAGS := -c
+# environment
+SNAP_COMMON = /var/snap/code/common
+# environment
+XDG_SESSION_TYPE = x11
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+IM_CONFIG_PHASE = 2
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+XAUTHORITY = /run/user/1000/gdm/Xauthority
+# environment
+GDMSESSION = ubuntu
+# environment
+XMODIFIERS = @im=ibus
+# makefile
+CURDIR := /home/student/Desktop/Sylvain/3D_rrt_plot_cpp
+# makefile
+SHELL = /bin/sh
+# environment
+SNAP_DATA = /var/snap/code/100
+# environment
+VTE_VERSION = 5202
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+XDG_CONFIG_DIRS = /etc/xdg/xdg-ubuntu:/etc/xdg
+# environment
+SNAP_INSTANCE_NAME = code
+# environment
+SNAP_ARCH = amd64
+# makefile (from 'makefile', line 1)
+MAKEFILE_LIST :=  makefile
+# automatic
+@F = $(notdir $@)
+# environment
+GIO_LAUNCHED_DESKTOP_FILE = /etc/xdg/autostart/org.gnome.SettingsDaemon.MediaKeys.desktop
+# environment
+USERNAME = student
+# makefile (from 'makefile', line 10)
+CXXFLAGS := -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math
+# environment
+MAKELEVEL := 0
+# environment
+XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
+# environment
+ROS_ETC_DIR = /opt/ros/melodic/etc/ros
+# environment
+DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
+# environment
+ROS_PACKAGE_PATH = /opt/ros/melodic/share
+# environment
+TERMINATOR_UUID = urn:uuid:7c51a63f-ec1d-420e-b6fb-7a54d0994bd6
+# environment
+ROS_PYTHON_VERSION = 2
+# environment
+LESSOPEN = | /usr/bin/lesspipe %s
+# environment
+LC_NAME = fr_FR.UTF-8
+# environment
+VSCODE_CWD = /home/student/Desktop/Sylvain/3D_rrt_plot_cpp
+# environment
+GSETTINGS_SCHEMA_DIR = /snap/code/100/usr/share/glib-2.0/schemas
+# default
+MAKE_HOST := x86_64-pc-linux-gnu
+# environment
+PATH = /opt/ros/melodic/bin:/home/student/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+# environment
+XDG_SESSION_DESKTOP = ubuntu
+# environment
+CLUTTER_IM_MODULE = xim
+# environment
+GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
+# environment
+SESSION_MANAGER = local/rosbook-01:@/tmp/.ICE-unix/2334,unix/rosbook-01:/tmp/.ICE-unix/2334
+# environment
+XDG_RUNTIME_DIR = /run/user/1000
+# environment
+GDK_PIXBUF_MODULE_FILE = /home/student/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+TEXTDOMAIN = im-config
+# environment
+SNAP = /snap/code/100
+# environment
+ROS_ROOT = /opt/ros/melodic/share/ros
+# environment
+SNAP_VERSION = 92d25e35
+# environment
+XDG_MENU_PREFIX = gnome-
+# environment
+DISABLE_WAYLAND = 1
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+GDK_PIXBUF_MODULEDIR = /snap/code/100/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
+# environment
+CMAKE_PREFIX_PATH = /opt/ros/melodic
+# environment
+LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+# environment
+ROS_DISTRO = melodic
+# environment
+SSH_AUTH_SOCK = /run/user/1000/keyring/ssh
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 2651
+# automatic
+%F = $(notdir $%)
+# environment
+DISPLAY = :0
+# environment
+GTK_IM_MODULE = ibus
+# environment
+SNAP_INSTANCE_KEY = 
+# environment
+PWD = /home/student/Desktop/Sylvain/3D_rrt_plot_cpp
+# environment
+XDG_SEAT = seat0
+# environment
+SSH_AGENT_PID = 2429
+# environment
+PKG_CONFIG_PATH = /opt/ros/melodic/lib/pkgconfig
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
+# environment
+GTK_MODULES = gail:atk-bridge
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+HOME = /home/student
+# environment
+LD_LIBRARY_PATH = /opt/ros/melodic/lib
+# environment
+LESSCLOSE = /usr/bin/lesspipe %s %s
+# environment
+VSCODE_CLI = 1
+# environment
+VSCODE_CODE_CACHE_PATH = /home/student/.config/Code/CachedData/92d25e35d9bf1a6b16f7d0758f25d48ace11e5b9
+# environment
+LOGNAME = student
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
+# environment
+SNAP_CONTEXT = p-eQapR4clG_84tlaXqjUhL9L5Ggiuq9raSDpgUr2VLY6lfPg7pm
+# automatic
++F = $(notdir $+)
+# environment
+ELECTRON_NO_ATTACH_CONSOLE = 1
+# environment
+SNAP_USER_COMMON = /home/student/snap/code/common
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+MAKE_VERSION := 4.1
+# environment
+GNOME_DESKTOP_SESSION_ID = this-is-deprecated
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# environment
+XDG_VTNR = 2
+# environment
+LC_TIME = fr_FR.UTF-8
+# environment
+SNAP_REAL_HOME = /home/student
+# environment
+COLORTERM = truecolor
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+QT_IM_MODULE = ibus
+# makefile (from 'makefile', line 1)
+SRCS = $(wildcard *.cpp)
+# environment
+SNAP_USER_DATA = /home/student/snap/code/100
+# environment
+SHLVL = 1
+# environment
+GNOME_SHELL_SESSION_MODE = ubuntu
+# environment
+XDG_SESSION_ID = 2
+# environment
+USER = student
+# environment
+SNAP_REVISION = 100
+# environment
+LC_MONETARY = fr_FR.UTF-8
+# makefile
+.DEFAULT_GOAL := all
+# environment
+XDG_CURRENT_DESKTOP = Unity
+# environment
+ROSLISP_PACKAGE_DIRECTORIES = 
+# automatic
+ 
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+LC_TELEPHONE = fr_FR.UTF-8
+# default
+MAKE_COMMAND := make
+# environment
+OLDPWD = /home/student
+# environment
+TERMINATOR_DBUS_PATH = /net/tenshu/Terminator2
+# default
+.VARIABLES := 
+# makefile (from 'makefile', line 2)
+BINS = $(SRCS:.cpp=)
+# automatic
+*F = $(notdir $*)
+# environment
+VSCODE_IPC_HOOK = /run/user/1000/vscode-62ee4e9e-1.69.0-main.sock
+# environment
+PYTHONPATH = /opt/ros/melodic/lib/python2.7/dist-packages
+# makefile
+MAKEFLAGS = pqrR
+# environment
+MFLAGS = -pqrR
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+ROS_VERSION = 1
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# environment
+GDK_BACKEND = x11
+# environment
+LC_PAPER = fr_FR.UTF-8
+# environment
+NO_AT_BRIDGE = 1
+# environment
+QT_ACCESSIBILITY = 1
+# environment
+DESKTOP_AUTOSTART_ID = 10e680c6be8e089ca1165761356026316100000023340007
+# environment
+TEXTDOMAINDIR = /usr/share/locale/
+# default
+MAKEFILES := 
+# environment
+SNAP_COOKIE = p-eQapR4clG_84tlaXqjUhL9L5Ggiuq9raSDpgUr2VLY6lfPg7pm
+# environment
+LC_NUMERIC = fr_FR.UTF-8
+# automatic
+<F = $(notdir $<)
+# environment
+LC_MEASUREMENT = fr_FR.UTF-8
+# environment
+ROS_MASTER_URI = http://localhost:11311
+# environment
+SNAP_NAME = code
+# environment
+LC_ALL = C
+# environment
+QT4_IM_MODULE = xim
+# makefile (from 'makefile', line 5)
+LIBS := -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+SNAP_REEXEC = 
+# environment
+CHROME_DESKTOP = code-url-handler.desktop
+# environment
+WINDOWPATH = 2
+# default
+.INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
+# environment
+LC_IDENTIFICATION = fr_FR.UTF-8
+# default
+.RECIPEPREFIX := 
+# environment
+LC_ADDRESS = fr_FR.UTF-8
+# environment
+LANG = C
+# environment
+TERM = xterm-256color
+# environment
+TERMINATOR_DBUS_NAME = net.tenshu.Terminator20x1a6021154d881c
+# environment
+VSCODE_PID = 11417
+# variable set hash-table stats:
+# Load=148/1024=14%, Rehash=0, Collisions=26/191=14%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (device 66306, inode 6553662): 34 files, 3 impossibilities.
+
+# 34 files, 3 impossibilities in 1 directories.
+
+# Implicit Rules
+
+%: %.cpp
+#  recipe to execute (from 'makefile', line 16):
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $< $(LIBS)
+
+# 1 implicit rules, 0 (0.0%) terminal.
+
+# Files
+
+# Not a target:
+command:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+all: dynibex_corrected command dynibex create_files_for_plot create_files_for_plot_rrt_star
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/7=0%
+
+# Not a target:
+dynibex_corrected.cpp:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-12 14:44:53.894117471
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-07-08 10:12:49.603664701
+#  File has been updated.
+#  Successfully updated.
+
+# Not a target:
+create_files_for_plot_rrt_star:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+dynibex_corrected: dynibex_corrected.cpp
+#  Implicit rule search has been done.
+#  Implicit/static pattern stem: 'dynibex_corrected'
+#  Last modified 2022-07-12 14:35:00.458511696
+#  File has been updated.
+#  Needs to be updated (-q is set).
+# automatic
+# @ := dynibex_corrected
+# automatic
+# % := 
+# automatic
+# * := dynibex_corrected
+# automatic
+# + := dynibex_corrected.cpp
+# automatic
+# | := 
+# automatic
+# < := dynibex_corrected.cpp
+# automatic
+# ^ := dynibex_corrected.cpp
+# automatic
+# ? := dynibex_corrected.cpp
+# variable set hash-table stats:
+# Load=8/32=25%, Rehash=0, Collisions=1/17=6%
+#  recipe to execute (from 'makefile', line 16):
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $< $(LIBS)
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+clean:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 19):
+	rm -f $(BINS)
+
+# Not a target:
+create_files_for_plot:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+dynibex:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# files hash-table stats:
+# Load=11/1024=1%, Rehash=0, Collisions=0/36=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 48 / storage = 580 B / avg = 12 B
+# current buf: size = 8162 B / used = 580 B / count = 48 / avg = 12 B
+
+# strcache performance: lookups = 66 / hit rate = 27%
+# hash-table stats:
+# Load=48/8192=1%, Rehash=0, Collisions=1/66=2%
+# Finished Make data base on Tue Jul 12 14:51:57 2022
+
+ 

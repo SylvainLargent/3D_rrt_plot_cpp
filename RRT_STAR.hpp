@@ -128,7 +128,7 @@ class RRT_STAR{
                 vector<Node*> empty_vector;
                 return empty_vector;
             }
-            delete(node_final_goal);
+            //delete(node_final_goal);
         }
 
 
@@ -288,7 +288,7 @@ class RRT_STAR{
                 node_now = node_now->get_parent();
                 ++i;
             }
-            delete(node_final); 
+            //delete(node_final); 
             return path;
         }
             
