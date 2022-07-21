@@ -9,6 +9,7 @@
 #include "ibex.h"
 #include <cstring>  
 #include <string>
+#include <stdlib.h>
 
 using namespace ibex;
 using namespace std;
@@ -32,6 +33,20 @@ int main(int argc, char ** argv){
         environment.add_rectangle(list_rectangles[i]);
     }
 
+//Plotting rectangle obstacles thanks to their vertices
+    vector<vector<Node*>> all_boundaries = environment.get_obstacles_vertex();  
+    ofstream all_boundaries_stream;
+    all_boundaries_stream.open("csv_files/obstacles.txt");
+    if(!all_boundaries.empty()){
+        for(int i = 0; i < all_boundaries.size(); ++i){
+            for(int j = 0; j < all_boundaries[i].size();++j){
+                all_boundaries_stream << (*(all_boundaries[i][j])) << std::endl;
+                delete(all_boundaries[i][j]);
+            }
+        }
+    }
+    all_boundaries_stream.close();
+
     //Obstacles for dynibex
     vector<vector<double>>rectangles_intervals = environment.get_rectangles_boundaries(); //Inflated obstacles boundaries
     
@@ -54,7 +69,7 @@ int main(int argc, char ** argv){
 
     //Opening the command with all the necessary information
     ifstream command;
-    command.open("csv_files/data1.txt");
+    command.open("csv_files/command.txt");
 
     string line;
 
@@ -83,26 +98,31 @@ int main(int argc, char ** argv){
         command.close();
     }
 
-    bool first_loop = true;
+    int rate = atoi(argv[1]); //100 : horizon time of around a second
     const int n= 3; 
     Variable y(n);
     Affine2Vector state(n);
 
     IntervalVector yinit(n);
 
-    for(int index = 0; index < list_of_information.size()-2; ++index){
-        if(index%1 == 0){
+    int cpt_sub=0;
+    int cpt_inter=0;
+    int index = 0;
+    int number_of_simulations = 0;
+    bool collision = false;
+    while(index < list_of_information.size()-1){
+            std::cerr << index << "/" << list_of_information.size() - 1 << endl <<  std::flush;
+            std::cerr << std::flush;
+
             //defaut sur la mesure Optitrack
             double deltax = 0.1;
             double deltay = 0.1;
             double deltaz = 0.1;
 
-            if(first_loop == true){
-                yinit[0] = Interval(list_of_information[index][3] - deltax, list_of_information[index][3] + deltax);
-                yinit[1] = Interval(list_of_information[index][4] - deltay, list_of_information[index][4] + deltay);
-                yinit[2] = Interval(list_of_information[index][5] - deltaz, list_of_information[index][5] + deltaz);
-                first_loop = false;
-            }
+            yinit[0] = Interval(list_of_information[index][3]) + Interval(-deltax, deltax);
+            yinit[1] = Interval(list_of_information[index][4]) + Interval(-deltay, deltay);
+            yinit[2] = Interval(list_of_information[index][5]) + Interval(-deltaz, deltaz);
+        
 
             //Paramètres 
             Interval Kp(1.8);
@@ -116,69 +136,113 @@ int main(int argc, char ** argv){
             Interval yGoal(y_goal);
             Interval zGoal(z_goal);
             IntervalVector destination_itvs = IntervalVector(6);
-            destination_itvs[0] = xGoal + Interval(-0.01, 0.01);
-            destination_itvs[1] = yGoal + Interval(-0.01, 0.01);
-            destination_itvs[2] = zGoal + Interval(-0.01, 0.01);
-
-            //commande uX,uY,uZ
-            Interval uX = Interval(list_of_information[index][0]);
-            Interval uY = Interval(list_of_information[index][1]);
-            Interval uZ = Interval(list_of_information[index][2]);
-
-            // cout << "Avant la simu : "<< yinit << endl;
-            double alphaX = 1;
-            double alphaY = 0.22;
-            double alphaZ = 0.2;
-            Function ydot = Function(y,Return( 
-                                uX*alphaX,
-                                uY*alphaY,
-                                uZ*alphaZ)
-                            );
-
-            ivp_ode problem = ivp_ode(ydot,list_of_information[index][10],yinit); //Modèle dynamique, temps de départ, yinit
-
-            simulation simu = simulation(&problem,list_of_information[index+1][10],HEUN,1e-1);
-
-            simu.run_simulation();
-            yinit = simu.get_last();
-
-            // cout << "Après la simu : "<< yinit << endl;
-
-
-    //Verification no obstacles touched, and destination reached
-            bool no_collision = false;
-            for(int k = 0; k < obstacles_itv.size(); ++k){
-                if(simu.has_crossed_b(obstacles_itv[k]) == NO){
-                    no_collision = true;
-                }
-            }
-            
-            // std::cout << simu.get_last() << std::endl;
-            // std::cout << x_goal << ", " << y_goal << ", " << z_goal <<std::endl;
-            // std::cout << "Objectives done accordingly ? " << !no_collision  << std::endl;
-            // std::cout << "Step Destination reached ? " << (simu.finished_in(destination_itvs) == false)  << std::endl;
+            destination_itvs[0] = xGoal + Interval(-0.03, 0.03);
+            destination_itvs[1] = yGoal + Interval(-0.03, 0.03);
+            destination_itvs[2] = zGoal + Interval(-0.03, 0.03);
             
 
-    //Write CSV for the 3D boxes for the plot
-            // std::list<solution_g>::iterator iterator_list;
-            // for(iterator_list=simu.list_solution_g.begin();iterator_list!=simu.list_solution_g.end();iterator_list++)
-            // {
-            // export_3d << iterator_list->box_jnh->operator[](0) <<
-            // " ; " << iterator_list->box_jnh->operator[](1) <<
-            // " ; " << iterator_list->box_jnh->operator[](2) << std::endl;
-            // }
-            export_3d << yinit[0] <<
-            " ; " << yinit[1] <<
-            " ; " << yinit[2] << std::endl;
+            if(index%rate == 0 || index+rate > list_of_information.size()-1){
+                int index_time_horizon = (index+rate <= list_of_information.size()-1) ? index+rate : list_of_information.size()-1;     
+                for(int j = number_of_simulations*rate; j < index_time_horizon; j++){
+                    //commande uX,uY,uZ
+                    Interval uX = Interval(list_of_information[j][0]);
+                    Interval uY = Interval(list_of_information[j][1]);
+                    Interval uZ = Interval(list_of_information[j][2]);
 
-    //Write CSV for the 3D boxes representinf the trajectory
+                    Interval alphaX = Interval(0,1);
+                    Interval alphaY = Interval(-0.4,0.4);
+                    Interval alphaZ = Interval(-0.4,0.4);
+
+                    // Interval betaX = Interval(-atof(argv[2]),0.2);
+                    // Interval betaY = Interval(-atof(argv[2]),atof(argv[2]));
+                    // Interval betaZ = Interval(-atof(argv[2]),atof(argv[2]));
+
+                    Interval betaX = Interval(-0.1,0.1);
+                    Interval betaY = Interval(-0.1,0.1);
+                    Interval betaZ = Interval(0,0.1);
+
+                    Function ydot = Function(y,Return( 
+                                        uX*alphaX + betaX,
+                                        uY*alphaY + betaY,
+                                        uZ*alphaZ + betaZ)
+                                    );
+
+                    ivp_ode problem = ivp_ode(ydot,list_of_information[j][10],yinit); //Modèle dynamique, temps de départ, yinit
+
+                    simulation simu = simulation(&problem,list_of_information[j+1][10],HEUN,1e-2,1e-3);
+
+                    simu.run_simulation();
+                    yinit = simu.get_last();
+
+                    //inclsion ? intersection non vide ?
+                    IntervalVector test(3);
+                    test[0] = Interval(list_of_information[j+1][3] - deltax, list_of_information[j+1][3] + deltax);
+                    test[1] = Interval(list_of_information[j+1][4] - deltay, list_of_information[j+1][4] + deltay);
+                    test[2] = Interval(list_of_information[j+1][5] - deltaz, list_of_information[j+1][5] + deltaz);
+
+
+                    if (test.is_subset(yinit))
+                        cpt_sub++;
+
+                    if (!(test&yinit).is_empty())
+                            cpt_inter++;
+
+            //Verification no obstacles touched, and destination reached
+                    for(int k = 0; k < obstacles_itv.size(); ++k){
+                        if( !(yinit&obstacles_itv[k]).is_empty() ){
+                            collision = true;
+                        }
+                    }
+                    
+                    // std::cout << "Step Destination reached ? " << (simu.finished_in(destination_itvs) == false)  << std::endl;
+                    
+            //For the last run which is shortened
+                    if(index+rate > list_of_information.size()-1){
+                        index = list_of_information.size(); //exits the while loop 
+                        std::cerr << j << "/" << list_of_information.size() - 1 << endl <<  std::flush;
+                        std::cerr << std::flush;
+
+
+                        //Dernier trace de la trajectoire
+                        double x_goal = list_of_information[j+1][3];
+                        double y_goal = list_of_information[j+1][4];
+                        double z_goal = list_of_information[j+1][5];
+
+                        Interval xGoal(x_goal);
+                        Interval yGoal(y_goal);
+                        Interval zGoal(z_goal);
+                        IntervalVector destination_itvs = IntervalVector(6);
+                        destination_itvs[0] = xGoal + Interval(-0.03, 0.03);
+                        destination_itvs[1] = yGoal + Interval(-0.03, 0.03);
+                        destination_itvs[2] = zGoal + Interval(-0.03, 0.03);
+                        
+                        trajectory_boxes<< destination_itvs[0] <<
+                        " ; " << destination_itvs[1] <<
+                        " ; " << destination_itvs[2] << std::endl;
+                    }
+                    //Write CSV for the 3D boxes for the plot
+                    export_3d << yinit[0] <<
+                    " ; " << yinit[1] <<
+                    " ; " << yinit[2] << std::endl;
+            
+                }//end for, sur l'horizon de temps
+                number_of_simulations+=1;
+        }//end if simulation
+
+
+        //Write CSV for the 3D boxes representinf the trajectory
             trajectory_boxes<< destination_itvs[0] <<
             " ; " << destination_itvs[1] <<
             " ; " << destination_itvs[2] << std::endl;
-        }//end else
+
+         ++index;
+        
     }//end while
 
+    std::cout << "Objectives done accordingly ? (No collision ?) " << !collision  << std::endl;
 
+    std::cout << "Intersection : " << cpt_inter << endl;
+    std::cout << "Inclusion : " << cpt_sub << endl;
     export_3d.close(); 
 
     return 0;

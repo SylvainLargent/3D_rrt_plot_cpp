@@ -133,6 +133,30 @@ class Env{
                 ey = rectangles[i][4];
                 ez = rectangles[i][5];
                 boundaries_list.push_back({
+                    ox,
+                    ox +ex,
+                    oy,
+                    oy+ey,
+                    oz,
+                    oz+ez,
+                });  
+                ++i;
+            }
+            return boundaries_list;
+        }
+
+        vector<vector<double>> get_rectangles_inflated_boundaries(){    //Same but of the boundaries this time !
+            vector<vector<double>> boundaries_list;
+            int i = 0;
+            double ox, oy, oz, ex, ey, ez;
+            while( i < number_of_rectangles){
+                ox = rectangles[i][0];
+                oy = rectangles[i][1];
+                oz = rectangles[i][2];
+                ex = rectangles[i][3];
+                ey = rectangles[i][4];
+                ez = rectangles[i][5];
+                boundaries_list.push_back({
                     ox-delta_x,
                     ox+delta_x +ex,
                     oy-delta_y,

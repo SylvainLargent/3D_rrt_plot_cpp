@@ -17,8 +17,9 @@ import os
 
 def main():
     trajectory_b  = False
-    plot_position_animation = False
+    plot_dynibex = True
     plot_actual_position = False
+    plot_position_animation = False
     plot_start_end = False
 
     if(trajectory_b):
@@ -28,7 +29,7 @@ def main():
         plot_trajectory_bool  = True    
     else :
         animation             = False
-        plot_tree             = False  
+        plot_tree             = False
         animation_trajectory  = False
         plot_trajectory_bool  = False
 
@@ -155,15 +156,60 @@ def main():
                 ys = []
                 zs = []
                 for i in range(0,len(position)):
-                    xs.append(position[i][0])
-                    ys.append(position[i][1])
-                    zs.append(position[i][2])
-                    ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'g')
-    
-    plot_dynibex = True
-    rate = 30
+                    if(i%100 ==0):
+                        xs.append(position[i][0])
+                        ys.append(position[i][1])
+                        zs.append(position[i][2])
+                        ax.plot(xs, ys, zs, label='parametric curve %i' %Number_of_iteration[0], color = 'g')
+
+
+
+
     if(plot_dynibex):
-        ##Plotted
+        #Real Trajectory
+        trajectory_boxes = []
+        with open("trajectory_boxes.txt", "r") as file:
+            for line in file:
+                #Traitons une ligne de trois intervalles dans chaque direction
+                line = line.replace( '(' , '' )
+                line = line.replace( ')' , '' )
+                list_of_intervals = line.strip().split(';') 
+                lower_bounds = [] #list of lower boundaries in each direction
+                widths       = []  
+                for i in range(len(list_of_intervals)): #On traite chaque direction une à une
+                    B = list_of_intervals[i].replace('[','')
+                    B = B.replace(']','')
+                    B = B.split(',')
+                    w = double(B[1]) - double(B[0])
+                    lb = double(B[0]) #lower bound
+                    lower_bounds.append(lb)
+                    widths.append(w)
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
+
+        #Ploting trajectory_boxes
+        V=[]
+        for i in range(len(trajectory_boxes)):
+                V.append(trajectory_boxes[i]) #On lui donne les coordonnees de chaque sommet
+                if(len(V)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
+                    faces = [[V[0],V[1],V[2],V[3]], 
+                            [V[4],V[5],V[6],V[7]],
+                            [V[0],V[1],V[5],V[4]],
+                            [V[2],V[3],V[7],V[6]],
+                            [V[1],V[2],V[6],V[5]],
+                            [V[4],V[7],V[3],V[0]]]
+                    if(i%(17)==0):
+                        collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'red' ,linewidths=0.1, edgecolors='orange', alpha=0.5))
+                    V = []
+
+
+        ##PLOTTING THE DYNIBEX SIMULATION
         vertices_of_the_3Dboxes = []
 
         with open("export_3d.txt", "r") as file:
@@ -194,61 +240,18 @@ def main():
         #Ploting vertices_of_the_3Dboxes
         Z=[]
         for i in range(len(vertices_of_the_3Dboxes)):
-            if(i%rate==0):
-                Z.append(vertices_of_the_3Dboxes[i]) #On lui donne les coordonnees de chaque sommet
-                if(len(Z)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
-                    faces = [[Z[0],Z[1],Z[2],Z[3]], 
-                            [Z[4],Z[5],Z[6],Z[7]],
-                            [Z[0],Z[1],Z[5],Z[4]],
-                            [Z[2],Z[3],Z[7],Z[6]],
-                            [Z[1],Z[2],Z[6],Z[5]],
-                            [Z[4],Z[7],Z[3],Z[0]]]
-                    collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'yellow' ,linewidths=0.05, edgecolors='blue', alpha=.2))
-                    # collection.set_facecolor('cyan')
-                    Z = []
-        
-        trajectory_boxes = []
-
-        with open("trajectory_boxes.txt", "r") as file:
-            for line in file:
-                #Traitons une ligne de trois intervalles dans chaque direction
-                line = line.replace( '(' , '' )
-                line = line.replace( ')' , '' )
-                list_of_intervals = line.strip().split(';') 
-                lower_bounds = [] #list of lower boundaries in each direction
-                widths       = []  
-                for i in range(len(list_of_intervals)): #On traite chaque direction une à une
-                    B = list_of_intervals[i].replace('[','')
-                    B = B.replace(']','')
-                    B = B.split(',')
-                    w = double(B[1]) - double(B[0])
-                    lb = double(B[0]) #lower bound
-                    lower_bounds.append(lb)
-                    widths.append(w)
-                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]])
-                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]])
-                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]])
-                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]])
-                trajectory_boxes.append([lower_bounds[0], lower_bounds[1], lower_bounds[2]+widths[2]])
-                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1], lower_bounds[2]+widths[2]])
-                trajectory_boxes.append([lower_bounds[0]+widths[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
-                trajectory_boxes.append([lower_bounds[0], lower_bounds[1]+widths[1], lower_bounds[2]+widths[2]])
-
-        #Ploting trajectory_boxes
-        V=[]
-        for i in range(len(trajectory_boxes)):
-            if(i%rate==0):
-                V.append(trajectory_boxes[i]) #On lui donne les coordonnees de chaque sommet
-                if(len(V)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
-                    faces = [[V[0],V[1],V[2],V[3]], 
-                            [V[4],V[5],V[6],V[7]],
-                            [V[0],V[1],V[5],V[4]],
-                            [V[2],V[3],V[7],V[6]],
-                            [V[1],V[2],V[6],V[5]],
-                            [V[4],V[7],V[3],V[0]]]
-                    collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'red' ,linewidths=0.1, edgecolors='orange', alpha=.2))
-                    # collection.set_facecolor('cyan')
-                    V = []
+            Z.append(vertices_of_the_3Dboxes[i]) #On lui donne les coordonnees de chaque sommet
+            if(len(Z)==8):                                                #Avec la position des 8 sommets il dessinne le polygone
+                faces = [[Z[0],Z[1],Z[2],Z[3]], 
+                        [Z[4],Z[5],Z[6],Z[7]],
+                        [Z[0],Z[1],Z[5],Z[4]],
+                        [Z[2],Z[3],Z[7],Z[6]],
+                        [Z[1],Z[2],Z[6],Z[5]],
+                        [Z[4],Z[7],Z[3],Z[0]]]
+                if(i%17 == 0):
+                    collection = ax.add_collection3d(Poly3DCollection(faces, facecolors = 'yellow' ,linewidths=0.075, edgecolors='blue', alpha=0.009))
+                # plt.pause(0.00000000000000000000001)
+                Z = []
         
 
 

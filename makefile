@@ -7,7 +7,7 @@ LIBS	 := $(shell pkg-config --libs  ibex)
 ifeq ($(DEBUG), yes)
 CXXFLAGS := $(CXXFLAGS) -O0 -g -pg -Wall -frounding-math
 else
-CXXFLAGS := $(CXXFLAGS) -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math
+CXXFLAGS := $(CXXFLAGS) -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g
 endif
 
 all: $(BINS)

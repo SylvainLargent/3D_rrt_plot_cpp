@@ -1,9 +1,9 @@
 make --dry-run --always-make --keep-going --print-directory
 make: Entering directory '/home/student/Desktop/Sylvain/3D_rrt_plot_cpp'
-g++  -frounding-math -ffloat-store -I/home/student/Ibex/BIN/include -I/home/student/Ibex/BIN/include/ibex -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -o dynibex_corrected dynibex_corrected.cpp -L/home/student/Ibex/BIN/lib -libex -lprim
-g++  -frounding-math -ffloat-store -I/home/student/Ibex/BIN/include -I/home/student/Ibex/BIN/include/ibex -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -o command command.cpp -L/home/student/Ibex/BIN/lib -libex -lprim
-g++  -frounding-math -ffloat-store -I/home/student/Ibex/BIN/include -I/home/student/Ibex/BIN/include/ibex -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -o dynibex dynibex.cpp -L/home/student/Ibex/BIN/lib -libex -lprim
-g++  -frounding-math -ffloat-store -I/home/student/Ibex/BIN/include -I/home/student/Ibex/BIN/include/ibex -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -o create_files_for_plot create_files_for_plot.cpp -L/home/student/Ibex/BIN/lib -libex -lprim
-g++  -frounding-math -ffloat-store -I/home/student/Ibex/BIN/include -I/home/student/Ibex/BIN/include/ibex -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -o create_files_for_plot_rrt_star create_files_for_plot_rrt_star.cpp -L/home/student/Ibex/BIN/lib -libex -lprim
+g++  -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g -o dynibex_corrected dynibex_corrected.cpp -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
+g++  -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g -o command command.cpp -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
+g++  -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g -o dynibex dynibex.cpp -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
+g++  -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g -o create_files_for_plot create_files_for_plot.cpp -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
+g++  -I/usr/local/include -I/usr/local/include/ibex -I/usr/local/include/ibex/3rd -O2 -DNDEBUG -Wno-deprecated -Wno-logical-op-parentheses -frounding-math -g -o create_files_for_plot_rrt_star create_files_for_plot_rrt_star.cpp -L/usr/local/lib -L/usr/local/lib/ibex/3rd -libex -lgaol -lgdtoa -lultim -lsoplex -lz
 make: Leaving directory '/home/student/Desktop/Sylvain/3D_rrt_plot_cpp'
  
